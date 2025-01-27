@@ -1,0 +1,101 @@
+	.intel_syntax noprefix
+	.globl	data
+	.data
+data:
+	.byte	20
+	.byte	92
+	.byte	43
+	.byte	69
+	.byte	81
+	.byte	73
+	.byte	95
+	.byte	23
+	.byte	72
+	.byte	22
+	.byte	24
+	.byte	69
+	.byte	25
+	.byte	27
+	.byte	22
+	.byte	17
+	.byte	23
+	.byte	29
+	.byte	24
+	.byte	73
+	.byte	17
+	.byte	24
+	.byte	85
+	.byte	27
+	.byte	112
+	.byte	76
+	.byte	15
+	.byte	92
+	.byte	24
+	.byte	1
+	.byte	73
+	.byte	84
+	.byte	13
+	.byte	81
+	.byte	12
+	.byte	0
+	.byte	84
+	.byte	73
+	.byte	82
+	.byte	8
+	.byte	82
+	.byte	81
+	.byte	76
+	.byte	125
+	
+	.text
+	.globl	printFLAG
+printFLAG:
+	sub	esp, 28
+	mov	eax, DWORD PTR [esp+32]
+	mov	DWORD PTR [esp], eax
+	call	printf
+	nop
+	add	esp, 28
+	ret
+
+	.globl	main
+main:
+	push ebp
+	mov	ebp, esp
+	and	esp, -16
+	sub	esp, 32
+	call	__x86.get_pc_thunk.ax
+	mov	DWORD PTR [esp+28], 0
+	jmp	L3
+L4:
+	mov	eax, DWORD PTR [esp+28]
+	add	eax, OFFSET FLAT:data
+	movzx eax, BYTE PTR [eax]
+	add	eax, 28
+	mov	edx, DWORD PTR [esp+28]
+	add	edx, OFFSET FLAT:data
+	mov	BYTE PTR [edx], al
+	add	DWORD PTR [esp+28], 1
+L3:
+	cmp	DWORD PTR [esp+28], 21
+	jle	L4
+L5:
+	mov	eax, DWORD PTR [esp+28]
+	add	eax, OFFSET FLAT:data
+	movzx edx, BYTE PTR [eax]
+	mov	eax, DWORD PTR [esp+28]
+	sub	eax, 22
+	movzx eax, BYTE PTR data[eax]
+	xor	edx, eax
+	mov	eax, DWORD PTR [esp+28]
+	add	eax, OFFSET FLAT:data
+	mov	BYTE PTR [eax], dl
+	add	DWORD PTR [esp+28], 1
+	cmp	DWORD PTR [esp+28], 42
+	jle	L5
+	mov	DWORD PTR [esp], OFFSET FLAT:data
+	call	printFLAG
+	mov	eax, 0
+	leave
+	ret
+

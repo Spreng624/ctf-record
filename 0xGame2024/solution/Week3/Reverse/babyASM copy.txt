@@ -1,0 +1,25 @@
+def printFLAG():
+	printf("%s\n", data)
+
+main:
+	index = 0
+	goto	L3
+L4:
+	eax = data[index]
+	eax += 28
+	data[index] = eax
+	index += 1
+
+L3:
+	if index<= 21 goto L4
+
+L5:
+	edx = data[index]
+	eax = data[index-22]
+	edx ^= eax
+	data[index-22] = edx
+	add	index, 1
+	if index <= 42 goto	L5
+
+	printFLAG
+
